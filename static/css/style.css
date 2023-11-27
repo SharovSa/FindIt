@@ -1,0 +1,107 @@
+body {
+  margin: 0;
+  height: 100%;
+}
+
+.top-container {
+  background-color: coral;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo {
+  text-align: center;
+  color: aquamarine;
+}
+
+.logo h1 {
+  font-size: 60px;
+  margin-bottom: 0;
+}
+
+.logo h3 {
+  margin-top: 5px;
+  font-size: 25px;
+}
+
+.search {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-grow: 0;
+}
+
+.input-btn {
+  background-color: coral;
+  border: none;
+  width: 3%;
+}
+
+.input-btn img{
+  width: 100%;
+}
+
+.input-place {
+  width: 30%;
+}
+
+.search-result {
+  background-color: coral;
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 2px solid aquamarine;
+  width: 15%;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+}
+
+.product-img {
+  width: 100%;
+}
+
+.product-name {
+  font-size: 20px;
+  text-align: left;
+  word-wrap: break-all;
+  padding-bottom: 10%;
+  padding-top: 10%;
+}
+
+.product-price {
+  font-size: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sort {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.sort button {
+  margin-left: 1%;
+  background-color: coral;
+  color: aquamarine;
+  font-size: 17px;
+  border: none;
+  white-space: nowrap;
+}
+
+footer {
+  padding-top: 1%;
+  padding-bottom: 1%;
+  background-color: aquamarine;
+  text-align: center;
+}

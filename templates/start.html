@@ -1,0 +1,42 @@
+<html>
+<head>
+    <title>FindIt</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <div class="top-container">
+        <div class="logo">
+            <h1>FindIt</h1>
+            <h3>Все маркетплейсы в одном</h3>
+        </div>
+        <div>
+            <form action="search" method="POST" class="search">
+                <input type="search" placeholder="Что ищем?" name="text" class="input-place">
+                <button type="submit" class="input-btn">
+                    <img src="../static/search-icon.svg">
+                </button>
+            </form>
+        </div>
+        <div class="sort">
+            <form action="/sort_type=popularity/" method="POST">
+                <button type="submit" name="popularity">по популярности</button>
+            </form>
+            <form action="/sort_type=price_up/" method="POST">
+                <button type="submit" name="price_up">по возрастанию цены</button>
+            </form>
+            <form action="/sort_type=price_down/" method="POST">
+                <button type="submit" name="price_down">по убыванию цены</button>
+            </form>
+            <form action="/sort_type=newly/" method="POST">
+                <button type="submit" name="newly">по новизне</button>
+            </form>
+        </div>
+    </div>
+    <div class="search-result">
+        
+    </div>
+</body>
+<footer>
+    <h1>Учебный проект по курсу Python МФТИ осень 2023</h1>
+</footer>
+</html>
