@@ -24,7 +24,20 @@ class DbManager:
             cur.execute('select * from favorite_products')
             products = []
             for product in cur.fetchall():
-                print(product)
                 products.append(ProductInfo(product[0], product[3], product[4], 5, product[2], product[1],
                                             in_favorite=True))
             return products
+
+    def delete_product(self, product_url):
+        with psycopg2.connect(dbname='finditdb', user='user', password='1234', host='localhost', port='5432') as conn:
+            cur = conn.cursor()
+            cur.execute(f"delete from favorite_products where url = '{product_url}'")
+            conn.commit()
+
+    def at(self, product_url):
+        with psycopg2.connect(dbname='finditdb', user='user', password='1234', host='localhost', port='5432') as conn:
+            cur = conn.cursor()
+            cur.execute(f"select * from favorite_products where url = '{product_url}'")
+            if len(cur.fetchall()) == 0:
+                return False
+            return True

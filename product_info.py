@@ -35,3 +35,6 @@ class ProductInfo:
 
     def is_in_favorite(self):
         return self.in_favorite
+
+    def set_favorite(self, flag):
+        self.in_favorite = flag

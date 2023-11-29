@@ -9,8 +9,11 @@
             <h1>FindIt</h1>
             <h3>Все маркетплейсы в одном</h3>
         </div>
-        <div>
-            <form action="search" method="POST" class="search">
+        <div class="top-container-middle">
+            <form action="/favorite/" class="favorite-page">
+                <button type="submit"><img src="../static/heart2.svg"></button>
+            </form>
+            <form action="/search/" method="POST" class="search">
                 <input type="search" placeholder="Что ищем?" name="text" class="input-place">
                 <button type="submit" class="input-btn">
                     <img src="../static/search-icon.svg">
@@ -33,7 +36,24 @@
         </div>
     </div>
     <div class="search-result">
-        
+        {% for product in products %}
+          <div class="product-card">
+            <a href="{{ product.get_url() }}">
+              <img src="{{ product.get_img() }}" class="product-img">
+            </a>
+            <span class="product-name">{{ product.get_name() }}</span>
+            <div class="product-card-bottom">
+                <div class="product-price">
+                  <span>{{ product.get_discounted_price() }}₽</span>
+                  <span><s>{{ product.get_price() }}₽</s></span>
+                </div>
+                <form action="/favorite/" method="POST" class="favorite-block">
+                    <input hidden value="{{ product.get_url() }}" type="text" name="prod_url">
+                    <button type="submit" class="favorite-btn"><img src="../static/heart2.svg"></button>
+                </form>
+            </div>
+          </div>
+        {% endfor %}
     </div>
 </body>
 <footer>
