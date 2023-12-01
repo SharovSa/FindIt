@@ -1,8 +1,7 @@
-from seleniumbase import SB
 from playwright.sync_api import sync_playwright
-from product_info import ProductInfo
+from back_parser.product_info import ProductInfo
 from time import sleep
-import stuff as st
+import back_parser.stuff as st
 
 
 class OzonSearch:
@@ -46,30 +45,44 @@ class OzonSearch:
             self.__get_product_info(product_url)
 
     def __get_links_on_products(self):
-        with SB(uc=True) as sb:
-            sb.driver.get("https://www.ozon.ru/")
-            sb.type('input', self.query)
-            sb.click('button[type="submit"]')
-            sb.sleep(1)
-            url = sb.get_current_url()
-            pos = url.find('text')
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=False)
+            context = browser.new_context()
+            context.set_extra_http_headers({
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) '
+                              'AppleWebKit/537.36 (KHTML, like Gecko) '
+                              'Chrome/73.0.3683.75 Safari/537.36'})
+            page = context.new_page()
+            page.goto("https://www.ozon.ru/")
+            page.wait_for_selector('input')
+            page.get_by_placeholder("Искать на Ozon").type(text=self.query, delay=0.5)
+            page.query_selector('button[aria-label="Поиск"]').click()
+            tmp_url = page.url
+            browser.close()
+            pos = tmp_url.find('text')
             if self.sort_by == st.SortType.popularity:
-                new_url = url
+                new_url = tmp_url
             elif self.sort_by == st.SortType.price_up:
-                new_url = url[:pos] + 'sorting=price&' + url[pos:]
+                new_url = tmp_url[:pos] + 'sorting=price&' + tmp_url[pos:]
             elif self.sort_by == st.SortType.price_down:
-                new_url = url[:pos] + 'sorting=price_desc&' + url[pos:]
+                new_url = tmp_url[:pos] + 'sorting=price_desc&' + tmp_url[pos:]
             else:
-                new_url = url[:pos] + 'sorting=new&' + url[pos:]
-            sb.driver.get(new_url)
-            if not sb.is_text_visible(self.query, 'strong'):
-                tmp = sb.get_current_url()
-                sb.get_new_driver(undetectable=True)
-                sb.driver.get(tmp)
-                sb.sleep(1)
-            sb.wait_for_element("#paginatorContent")
-            product_urls = [el.get_attribute('href') for el in sb.find_elements('a[href^="/product"]')]
-            return product_urls
+                new_url = tmp_url[:pos] + 'sorting=new&' + tmp_url[pos:]
+            browser = pw.chromium.launch(headless=False)
+            context = browser.new_context()
+            context.set_extra_http_headers({
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) '
+                              'AppleWebKit/537.36 (KHTML, like Gecko) '
+                              'Chrome/73.0.3683.75 Safari/537.36'})
+            page = context.new_page()
+            page.goto(new_url)
+            sleep(3)
+            if page.query_selector('div[data-widget="searchResultsError"]') is not None:
+                return []
+            else:
+                page.wait_for_selector("#paginatorContent")
+                product_urls = ["https://www.ozon.ru" + el.get_attribute('href') for el in page.query_selector_all('a[href^="/product"]')]
+                return product_urls
 
     def get_products(self):
         self.parse()

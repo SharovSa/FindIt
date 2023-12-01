@@ -1,8 +1,8 @@
 from time import sleep
 import playwright.sync_api
 from playwright.sync_api import sync_playwright
-from product_info import ProductInfo
-import stuff as st
+from back_parser.product_info import ProductInfo
+import back_parser.stuff as st
 
 
 class YaMarketSearch:
@@ -48,28 +48,31 @@ class YaMarketSearch:
                                               st.make_digital_price(discounted_price), 5, img, url))
 
     def __get_links_on_products(self):
-        if self.sort_by != st.SortType.popularity:
-            if self.sort_by == st.SortType.price_up:
-                self.page.get_by_text('по цене').click()
-            elif self.sort_by == st.SortType.price_down:
-                try:
+        if self.page.get_by_text('Этого мы не нашли') is not None:
+            return
+        else:
+            if self.sort_by != st.SortType.popularity:
+                if self.sort_by == st.SortType.price_up:
                     self.page.get_by_text('по цене').click()
-                    self.page.wait_for_selector('button[data-zone-name="ShowAllButton"]', timeout=5000)
-                    self.page.get_by_text('по цене').click()
-                except playwright.sync_api.TimeoutError:
-                    print("Error")
-                    self.page.get_by_text('по цене').click()
+                elif self.sort_by == st.SortType.price_down:
+                    try:
+                        self.page.get_by_text('по цене').click()
+                        self.page.wait_for_selector('button[data-zone-name="ShowAllButton"]', timeout=5000)
+                        self.page.get_by_text('по цене').click()
+                    except playwright.sync_api.TimeoutError:
+                        print("Error")
+                        self.page.get_by_text('по цене').click()
 
-        self.page.wait_for_selector("#searchResults")
-        #self.__page_down()
-        #self.page.wait_for_selector(f':text("Показать ещё")')
-        sleep(2)
-        search_result = self.page.query_selector("#searchResults")
-        products = search_result.query_selector_all('article[data-baobab-name="productSnippet"]')
-        for count, product in enumerate(products):
-            if count == st.COUNT_SEARCHED_PRODUCTS:
-                break
-            self.__get_product_info(product)
+            self.page.wait_for_selector("#searchResults")
+            #self.__page_down()
+            #self.page.wait_for_selector(f':text("Показать ещё")')
+            sleep(2)
+            search_result = self.page.query_selector("#searchResults")
+            products = search_result.query_selector_all('article[data-baobab-name="productSnippet"]')
+            for count, product in enumerate(products):
+                if count == st.COUNT_SEARCHED_PRODUCTS:
+                    break
+                self.__get_product_info(product)
 
     def parse(self):
         with sync_playwright() as pw:
@@ -81,8 +84,8 @@ class YaMarketSearch:
             self.page = self.context.new_page()
             self.page.goto("https://market.yandex.ru/")
             self.page.get_by_placeholder("Искать товары").type(text=self._query, delay=0.9)
-            self.page.wait_for_selector('button[data-auto="close-popup"]')
-            self.page.query_selector('button[data-auto="close-popup"]').click()
+            #self.page.wait_for_selector('button[data-auto="close-popup"]')
+            #self.page.query_selector('button[data-auto="close-popup"]').click()
             self.page.query_selector("button[type='submit']").click()
             self.__get_links_on_products()
 

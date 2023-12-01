@@ -1,4 +1,15 @@
 services:
+  front:
+    build: ./front
+    depends_on:
+      - postgres
+      - back_parser
+
+  back_parser:
+    build: ./back_parser
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:13.3
     expose:

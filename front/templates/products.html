@@ -36,6 +36,9 @@
       </div>
     </div>
     <div class="search-result">
+        {% if len == 0 %}
+            <h1>Ничего не найдено</h1>
+        {% endif %}
         {% for id, product in products %}
           <div class="product-card">
             <a href="{{ product.get_url() }}">

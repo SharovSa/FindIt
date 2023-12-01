@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright
 from time import sleep
-import stuff as st
-from product_info import ProductInfo
+import back_parser.stuff as st
+from back_parser.product_info import ProductInfo
 
 
 class WBSearch:
@@ -36,22 +36,26 @@ class WBSearch:
             sleep(1)
             self.page.query_selector('#searchInput').type(text=self.query, delay=0.9)
             self.page.query_selector('#applySearchBtn').click()
-            if self.sort_by != st.SortType.popularity:
-                self.page.wait_for_selector("button[class='dropdown-filter__btn dropdown-filter__btn--sorter']",
-                                            state='attached').click()
-                if self.sort_by == st.SortType.price_up:
-                    self.page.get_by_text('По возрастанию цены').click()
-                elif self.sort_by == st.SortType.price_down:
-                    self.page.get_by_text('По убыванию цены').click()
-                else:
-                    self.page.get_by_text('По новинкам').click()
             sleep(1)
-            self.page.wait_for_selector(".product-card-overflow", state='attached')
-            product_cards = self.page.query_selector_all('.product-card__wrapper')
-            for count, product_card in enumerate(product_cards):
-                if count == st.COUNT_SEARCHED_PRODUCTS:
-                    break
-                self.__get_product_info(product_card)
+            if self.page.query_selector('div[class="not-found-search__wrap"]') is not None:
+                return
+            else:
+                if self.sort_by != st.SortType.popularity:
+                    self.page.wait_for_selector("button[class='dropdown-filter__btn dropdown-filter__btn--sorter']",
+                                                state='attached').click()
+                    if self.sort_by == st.SortType.price_up:
+                        self.page.get_by_text('По возрастанию цены').click()
+                    elif self.sort_by == st.SortType.price_down:
+                        self.page.get_by_text('По убыванию цены').click()
+                    else:
+                        self.page.get_by_text('По новинкам').click()
+                sleep(1)
+                self.page.wait_for_selector(".product-card-overflow", state='attached')
+                product_cards = self.page.query_selector_all('.product-card__wrapper')
+                for count, product_card in enumerate(product_cards):
+                    if count == st.COUNT_SEARCHED_PRODUCTS:
+                        break
+                    self.__get_product_info(product_card)
 
     def get_products(self):
         self.parse()

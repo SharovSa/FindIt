@@ -1,9 +1,9 @@
-from stuff import SortType
-from ozon_search import OzonSearch
-from wb_search import WBSearch
-from db import DbManager
-from yandex_market_search import YaMarketSearch
-from product_info import ProductInfo
+from back_parser.stuff import SortType
+from back_parser.ozon_search import OzonSearch
+from back_parser.wb_search import WBSearch
+from data.db import DbManager
+from back_parser.yandex_market_search import YaMarketSearch
+from back_parser.product_info import ProductInfo
 
 
 class Sorter:
@@ -19,8 +19,9 @@ class Sorter:
         self.sort_by = sort_by
 
     def __sort_products(self):
-        self.sorted_products = (
-                                WBSearch(self.query, self.sort_by).get_products())
+        self.sorted_products = (OzonSearch(self.query, self.sort_by).get_products() +
+                                WBSearch(self.query, self.sort_by).get_products() +
+                                YaMarketSearch(self.query, self.sort_by).get_products())
         if self.sort_by == SortType.price_up:
             self.sorted_products.sort(key=ProductInfo.get_discounted_price)
         elif self.sort_by == SortType.price_down:
@@ -35,6 +36,8 @@ class Sorter:
     def get_sorted_products(self) -> list[ProductInfo]:
         if self.query != self.pref_query or self.sort_by != self.pref_sort_by:
             self.__sort_products()
+        if len(self.sorted_products) == 0:
+            return self.sorted_products
         self.__check_favorite()
         self.pref_query = self.query
         self.pref_sort_by = self.sort_by

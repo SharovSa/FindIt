@@ -1,5 +1,0 @@
-seleniumbase
-playwright 1.36.0
-$playwright install
-flask
-psycopg2-binary

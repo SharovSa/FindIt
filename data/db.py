@@ -1,5 +1,5 @@
 import psycopg2
-from product_info import ProductInfo
+from back_parser.product_info import ProductInfo
 
 
 class DbManager:
