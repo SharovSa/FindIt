@@ -34,7 +34,7 @@ def get_sort_by_popularity():
     if sorter.query == 'start_query':
         return render_template('start.html')
     else:
-        return render_template('products.html', products=enumerate(enumerate(sorter.get_sorted_products())), search_text=sorter.query, len=len(sorter.get_sorted_products()))
+        return render_template('products.html', products=enumerate(sorter.get_sorted_products()), search_text=sorter.query, len=len(sorter.get_sorted_products()))
 
 
 @app.route('/sort_type=price_up/', methods=['POST'])
@@ -43,7 +43,7 @@ def get_sort_by_price_up():
     if sorter.query == 'start_query':
         return render_template('start.html')
     else:
-        return render_template('products.html', products=enumerate(enumerate(sorter.get_sorted_products())), search_text=sorter.query, len=len(sorter.get_sorted_products()))
+        return render_template('products.html', products=enumerate(sorter.get_sorted_products()), search_text=sorter.query, len=len(sorter.get_sorted_products()))
 
 
 @app.route('/sort_type=price_down/', methods=['POST'])
@@ -52,7 +52,7 @@ def get_sort_by_price_down():
     if sorter.query == 'start_query':
         return render_template('start.html')
     else:
-        return render_template('products.html', products=enumerate(enumerate(sorter.get_sorted_products())), search_text=sorter.query, len=len(sorter.get_sorted_products()))
+        return render_template('products.html', products=enumerate(sorter.get_sorted_products()), search_text=sorter.query, len=len(sorter.get_sorted_products()))
 
 
 @app.route('/sort_type=newly/', methods=['POST'])
@@ -61,7 +61,7 @@ def get_sort_by_newly():
     if sorter.query == 'start_query':
         return render_template('start.html')
     else:
-        return render_template('products.html', products=enumerate(enumerate(sorter.get_sorted_products())), search_text=sorter.query, len=len(sorter.get_sorted_products()))
+        return render_template('products.html', products=enumerate(sorter.get_sorted_products()), search_text=sorter.query, len=len(sorter.get_sorted_products()))
 
 
 @app.route('/make_favorite/', methods=['POST'])
@@ -72,7 +72,7 @@ def make_favorite():
         db.delete_product(product.get_url())
     else:
         db.add_product(product)
-    return render_template('products.html', products=enumerate(enumerate(sorter.get_sorted_products())), search_text=sorter.query, len=len(sorter.get_sorted_products()))
+    return render_template('products.html', products=enumerate(sorter.get_sorted_products()), search_text=sorter.query, len=len(sorter.get_sorted_products()))
 
 
 @app.route('/favorite/')
