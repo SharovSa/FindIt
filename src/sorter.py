@@ -1,9 +1,9 @@
-from back_parser.stuff import SortType
-from back_parser.ozon_search import OzonSearch
-from back_parser.wb_search import WBSearch
-from data.db import DbManager
-from back_parser.yandex_market_search import YaMarketSearch
-from back_parser.product_info import ProductInfo
+from stuff import SortType
+from ozon_search import OzonSearch
+from wb_search import WBSearch
+from db import DbManager
+from yandex_market_search import YaMarketSearch
+from product_info import ProductInfo
 
 
 class Sorter:

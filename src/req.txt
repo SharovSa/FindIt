@@ -1,0 +1,3 @@
+flask
+playwright
+psycopg2-binary

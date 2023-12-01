@@ -1,15 +1,15 @@
 from flask import Flask, render_template, request
-from back_parser.sorter import Sorter
-from back_parser.stuff import SortType
-from data.db import DbManager
-from back_parser.product_info import ProductInfo
+from sorter import Sorter
+from stuff import SortType
+from db import DbManager
+from product_info import ProductInfo
+
+
+app = Flask(__name__)
 
 
 sorter = Sorter('start_query')
 db = DbManager()
-
-
-app = Flask(__name__)
 
 
 @app.route('/')
@@ -86,4 +86,4 @@ def change_favorite():
     db.delete_product(url)
     return render_template('start.html', products=db.get_products())
 
-app.run()
+app.run(host='0.0.0.0', port=5000)

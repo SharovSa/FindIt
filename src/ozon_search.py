@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright
-from back_parser.product_info import ProductInfo
+from product_info import ProductInfo
 from time import sleep
-import back_parser.stuff as st
+import stuff as st
 
 
 class OzonSearch:
@@ -12,7 +12,7 @@ class OzonSearch:
 
     def __get_product_info(self, url):
         with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=False)
+            browser = pw.chromium.launch()
             self.context = browser.new_context()
             self.context.set_extra_http_headers({
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, '
@@ -46,7 +46,7 @@ class OzonSearch:
 
     def __get_links_on_products(self):
         with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=False)
+            browser = pw.chromium.launch()
             context = browser.new_context()
             context.set_extra_http_headers({
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) '
@@ -68,7 +68,7 @@ class OzonSearch:
                 new_url = tmp_url[:pos] + 'sorting=price_desc&' + tmp_url[pos:]
             else:
                 new_url = tmp_url[:pos] + 'sorting=new&' + tmp_url[pos:]
-            browser = pw.chromium.launch(headless=False)
+            browser = pw.chromium.launch()
             context = browser.new_context()
             context.set_extra_http_headers({
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) '

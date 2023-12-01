@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright
 from time import sleep
-import back_parser.stuff as st
-from back_parser.product_info import ProductInfo
+import stuff as st
+from product_info import ProductInfo
 
 
 class WBSearch:
@@ -25,7 +25,7 @@ class WBSearch:
 
     def parse(self):
         with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=False)
+            browser = pw.chromium.launch()
             self.context = browser.new_context()
             self.context.set_extra_http_headers({
                                                     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) '

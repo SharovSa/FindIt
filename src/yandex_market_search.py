@@ -1,8 +1,8 @@
 from time import sleep
 import playwright.sync_api
 from playwright.sync_api import sync_playwright
-from back_parser.product_info import ProductInfo
-import back_parser.stuff as st
+from product_info import ProductInfo
+import stuff as st
 
 
 class YaMarketSearch:
@@ -76,7 +76,7 @@ class YaMarketSearch:
 
     def parse(self):
         with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=False)
+            browser = pw.chromium.launch()
             self.context = browser.new_context()
             self.context.set_extra_http_headers({'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) '
                                                               'AppleWebKit/537.36 (KHTML, like Gecko) '

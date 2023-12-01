@@ -1,19 +1,8 @@
+version: '3'
+
 services:
-  front:
-    build: ./front
-    depends_on:
-      - postgres
-      - back_parser
-
-  back_parser:
-    build: ./back_parser
-    depends_on:
-      - postgres
-
   postgres:
     image: postgres:13.3
-    expose:
-      - 5432
     ports:
       - "5432:5432"
     environment:
@@ -27,8 +16,17 @@ services:
       retries: 5
       start_period: 10s
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 4G
+    volumes:      
+      - ./postgres-data/postgres:/var/lib/postgresql/data
+          
+  back_front:
+    restart: always
+    build: ./src
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/src
+    depends_on:
+      - postgres
+    entrypoint: ["python", "main.py"]
+
