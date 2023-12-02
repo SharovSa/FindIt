@@ -32,6 +32,8 @@ class Sorter:
         for i in range(len(self.sorted_products)):
             if db.at(self.sorted_products[i].get_url()):
                 self.sorted_products[i].set_favorite(True)
+            else:
+                self.sorted_products[i].set_favorite(False)
 
     def get_sorted_products(self) -> list[ProductInfo]:
         if self.query != self.pref_query or self.sort_by != self.pref_sort_by:

@@ -32,7 +32,7 @@ def search():
 def get_sort_by_popularity():
     sorter.set_sort_type(SortType.popularity)
     if sorter.query == 'start_query':
-        return render_template('start.html')
+        return render_template('start.html', products=db.get_products())
     else:
         return render_template('products.html', products=enumerate(sorter.get_sorted_products()), search_text=sorter.query, len=len(sorter.get_sorted_products()))
 
@@ -41,7 +41,7 @@ def get_sort_by_popularity():
 def get_sort_by_price_up():
     sorter.set_sort_type(SortType.price_up)
     if sorter.query == 'start_query':
-        return render_template('start.html')
+        return render_template('start.html', products=db.get_products())
     else:
         return render_template('products.html', products=enumerate(sorter.get_sorted_products()), search_text=sorter.query, len=len(sorter.get_sorted_products()))
 
@@ -50,7 +50,7 @@ def get_sort_by_price_up():
 def get_sort_by_price_down():
     sorter.set_sort_type(SortType.price_down)
     if sorter.query == 'start_query':
-        return render_template('start.html')
+        return render_template('start.html', products=db.get_products())
     else:
         return render_template('products.html', products=enumerate(sorter.get_sorted_products()), search_text=sorter.query, len=len(sorter.get_sorted_products()))
 
@@ -59,7 +59,7 @@ def get_sort_by_price_down():
 def get_sort_by_newly():
     sorter.set_sort_type(SortType.newly)
     if sorter.query == 'start_query':
-        return render_template('start.html')
+        return render_template('start.html', products=db.get_products())
     else:
         return render_template('products.html', products=enumerate(sorter.get_sorted_products()), search_text=sorter.query, len=len(sorter.get_sorted_products()))
 
