@@ -9,7 +9,7 @@ def make_digital_price(num):
     for symbl in num:
         if symbl in digits:
             res += symbl
-    return int(res)
+    return res
 
 
 class SortType(Enum):

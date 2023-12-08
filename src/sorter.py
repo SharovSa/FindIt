@@ -19,9 +19,22 @@ class Sorter:
         self.sort_by = sort_by
 
     def __sort_products(self):
-        self.sorted_products = (OzonSearch(self.query, self.sort_by).get_products() +
-                                WBSearch(self.query, self.sort_by).get_products() +
-                                YaMarketSearch(self.query, self.sort_by).get_products())
+        if self.query[8:11] == "www":
+            if self.query[12:16] == 'ozon':
+                self.sorted_products.append(OzonSearch(self.query, self.sort_by).get_product())
+                product_name = self.sorted_products[0].get_name()
+                self.sorted_products.append(YaMarketSearch(product_name, self.sort_by).get_product())
+                self.sorted_products.append(WBSearch(product_name, self.sort_by).get_product())
+            else:
+                self.sorted_products.append(WBSearch(self.query, self.sort_by).get_product())
+                product_name = self.sorted_products[0].get_name()
+                self.sorted_products.append(YaMarketSearch(product_name, self.sort_by).get_product())
+                self.sorted_products.append(OzonSearch(product_name, self.sort_by).get_product())
+        else:
+            self.sorted_products.append(YaMarketSearch(self.query, self.sort_by).get_product())
+            product_name = self.sorted_products[0].get_name()
+            self.sorted_products.append(OzonSearch(product_name, self.sort_by).get_product())
+            self.sorted_products.append(WBSearch(product_name, self.sort_by).get_product())
         if self.sort_by == SortType.price_up:
             self.sorted_products.sort(key=ProductInfo.get_discounted_price)
         elif self.sort_by == SortType.price_down:

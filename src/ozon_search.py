@@ -8,7 +8,7 @@ class OzonSearch:
     def __init__(self, query, sort_by=st.SortType.popularity):
         self.query = query
         self.sort_by = sort_by
-        self.products_list = []
+        self.product = None
 
     def __get_product_info(self, url):
         with sync_playwright() as pw:
@@ -19,32 +19,25 @@ class OzonSearch:
                               'like Gecko) Chrome/73.0.3683.75 Safari/537.36'})
             page = self.context.new_page()
             page.goto(url)
-            sleep(3)
+            page.wait_for_selector('div[data-widget="container"]')
             name = page.query_selector('div[data-widget="webProductHeading"]').query_selector('h1').inner_text()
             prices = page.query_selector('div[data-widget="webPrice"]').query_selector_all('span')
             if len(prices) == 2:
                 price, discounted_price = prices[1].inner_text(), prices[0].inner_text()
             else:
                 price, discounted_price = prices[4].inner_text(), prices[1].inner_text()
-            rating = 5
             img = page.query_selector('div[data-widget="webGallery"]').query_selector('img[loading="eager"]').get_attribute('src')
-            self.products_list.append(ProductInfo(name, st.make_digital_price(price),
-                                                  st.make_digital_price(discounted_price), rating, img, url))
+            self.product = ProductInfo(name, st.make_digital_price(price), st.make_digital_price(discounted_price), img, url)
 
     def parse(self):
-        product_urls = self.__get_links_on_products()
-        pref_url = ""
-        count = 0
-        for product_url in product_urls:
-            if count == st.COUNT_SEARCHED_PRODUCTS:
-                break
-            if product_url == pref_url:
-                continue
-            count += 1
-            pref_url = product_url
-            self.__get_product_info(product_url)
+        if self.query.find('https', 0) != -1:
+            self.__get_product_info(self.query)
+        else:
+            product_url = self.__get_link_on_product()
+            if product_url is not None:
+                self.__get_product_info(product_url)
 
-    def __get_links_on_products(self):
+    def __get_link_on_product(self):
         with sync_playwright() as pw:
             browser = pw.chromium.launch()
             context = browser.new_context()
@@ -78,12 +71,12 @@ class OzonSearch:
             page.goto(new_url)
             sleep(3)
             if page.query_selector('div[data-widget="searchResultsError"]') is not None:
-                return []
+                return None
             else:
                 page.wait_for_selector("#paginatorContent")
-                product_urls = ["https://www.ozon.ru" + el.get_attribute('href') for el in page.query_selector_all('a[href^="/product"]')]
-                return product_urls
+                product_url = "https://www.ozon.ru" + page.query_selector('a[href^="/product"]').get_attribute('href')
+                return product_url
 
-    def get_products(self):
+    def get_product(self):
         self.parse()
-        return self.products_list
+        return self.product
