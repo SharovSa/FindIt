@@ -60,4 +60,5 @@ class Sorter:
 
     def set_query(self, new_query):
         self.pref_query = self.query
+        self.sorted_products = []
         self.query = new_query
