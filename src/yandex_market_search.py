@@ -43,7 +43,7 @@ class YaMarketSearch:
         else:
             price = self.page.query_selector('h3[data-auto="price-block"]').inner_text()
             discounted_price = price
-        img = self.page.query_selector('img').get_attribute('src')
+        img = self.page.query_selector('div[data-zone-name="media-viewer-gallery"]').query_selector('img').get_attribute('src')
         self.product = ProductInfo(name, price, st.make_digital_price(discounted_price), img, url)
 
     def __get_link_on_product(self):

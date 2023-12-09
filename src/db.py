@@ -25,7 +25,7 @@ class DbManager:
             cur.execute('select * from favorite_products')
             products = []
             for product in cur.fetchall():
-                products.append(ProductInfo(product[0], product[3], product[4], 5, product[2], product[1],
+                products.append(ProductInfo(product[0], product[3], product[4], product[2], product[1],
                                             in_favorite=True))
             return products
 
